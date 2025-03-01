@@ -16,7 +16,7 @@ export const navItems = [
       label: "Projects",
     },
     {
-      href: "https://nextjs.org",
+      href: "https://github.com/monoerea",
       imgSrc: "/globe.svg",
       alt: "Globe icon",
       label: "Go to github/monoerea.com →",

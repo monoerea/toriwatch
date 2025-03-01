@@ -33,8 +33,8 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="w-full max-w-md p-6 bg-base-300 shadow-md rounded-lg">
-      <h2 className="text-2xl font-semibold text-center">Login to ToriWatch</h2>
+    <div className="w-full max-w-md px-6 py-5 bg-base-300 shadow-md rounded-lg">
+      <h2 className="text-2xl font-semibold text-center">Authenticate Toriwatch</h2>
 
       {error && <p className="text-red-500 text-center">{error}</p>}
 
