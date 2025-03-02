@@ -22,6 +22,7 @@ function handleNewArticle(article) {
 
 async function sendToServer(batch) {
     return new Promise((resolve, reject) => {
+    //TODO: Replace with real working command
     setTimeout(() => {
         if (Math.random() < 0.9) {
         resolve({ status: "success", data: batch });

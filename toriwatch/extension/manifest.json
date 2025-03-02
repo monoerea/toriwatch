@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "Twitter Bot Detector",
+  "description": "Test extension.",
+  "version": "0.0.1",
+  "permissions": ["storage", "tabs", "activeTab", "scripting"],
+  "host_permissions": ["https://*.x.com/*","http://localhost:3000/*"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "16": "./IMG/icon16.png",
+    "48": "./IMG/icon48.png",
+    "128": "./IMG/icon128.png"
+  },
+  "action": {
+    "default_icon": {
+      "16": "./IMG/icon16.png",
+      "48": "./IMG/icon48.png",
+      "128": "./IMG/icon128.png"
+    },
+    "default_title": "Twitter Bot Detector",
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [{
+    "matches": ["https://*.x.com/*"],
+    "js": ["./content.js"]
+  }],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; frame-src http://localhost:3000;"
+  }
+}

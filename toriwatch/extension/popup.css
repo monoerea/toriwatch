@@ -1,0 +1,45 @@
+/* Hide scrollbar completely */
+::-webkit-scrollbar {
+    width: 0px;
+}
+
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-thumb {
+    background: transparent !important; /* Fully transparent */
+    display: none;
+}
+
+/* Prevent unwanted scrolling */
+html, body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: auto;
+    height: auto;
+    min-width: 300px;
+    min-height: 50px;
+    max-height: 800px;
+    overflow: hidden !important; /* Ensures no scrollbars */
+    padding: 0;
+    margin: 0;
+    border-radius: 15px;
+    background-color: oklch(25.33% .016 252.42);
+    transition: height 0.3s ease-in-out;
+    scrollbar-width: none; /* Hide scrollbar in Firefox */
+}
+
+/* Hide scrollbar in iframe */
+iframe {
+    width: 100%;
+    min-height: 50px;
+    max-height: 800px;
+    border: none;
+    overflow: hidden !important;
+    transition: height 0.3s ease-in-out;
+    scrollbar-width: none; /* Firefox */
+}
+
+/* Force iframe to prevent scrolling */
+iframe html, iframe body {
+    overflow: hidden !important;
+}
