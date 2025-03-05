@@ -1,0 +1,66 @@
+/your_project
+│
+├── /backend                      # FastAPI Backend
+│   ├── /app                      # Main FastAPI app
+│   │   ├── /api                  # API routes
+│   │   │   ├── v1/               # Versioned API
+│   │   │   │   ├── endpoints.py  # API endpoints
+│   │   │   │   ├── models.py     # Pydantic models
+│   │   │   │   ├── schemas.py    # Request/Response schemas
+│   │   │   │   ├── services.py   # Business logic layer
+│   │   │   │   ├── events.py     # Event-driven handlers
+│   │   │   │   ├── dependencies.py # Dependency injection
+│   │   ├── /core                 # Core utilities and config
+│   │   │   ├── config.py         # App settings
+│   │   │   ├── security.py       # Authentication/authorization
+│   │   ├── /models               # ML Models
+│   │   │   ├── model_loader.py   # Load trained models
+│   │   │   ├── model_trainer.py  # Train ML models
+│   │   │   ├── model_evaluator.py# Evaluate models
+│   │   ├── /tests                # Unit & Integration tests
+│   │   ├── main.py               # FastAPI entry point
+│   │   ├── events.py             # Event listeners (startup, shutdown)
+│   │   ├── dependencies.py       # Shared dependencies
+│   │
+│   ├── /data                     # Data storage
+│   │   ├── /datasets             # Raw datasets
+│   │   ├── /models               # Saved ML models
+│   │
+│   ├── /scripts                  # Utility scripts (migration, setup)
+│   │   ├── train.py              # Script to train models
+│   │   ├── evaluate.py           # Script to evaluate models
+│   │
+│   ├── /venv                     # Python virtual environment
+│   ├── requirements.txt           # Dependencies
+│   ├── dev-requirements.txt       # Dev dependencies
+│   ├── Dockerfile                 # Docker config
+│   ├── .env                       # Environment variables
+│
+├── /frontend                      # Next.js Frontend
+│   ├── /components                # UI Components
+│   │   ├── Button.tsx
+│   │   ├── Card.tsx
+│   ├── /views                     # MVVM Views
+│   │   ├── Home.tsx
+│   │   ├── Predict.tsx
+│   ├── /models                    # Frontend data models
+│   │   ├── PredictionModel.ts
+│   ├── /services                  # API services (fetching data)
+│   │   ├── api.ts                  # API client
+│   │   ├── predictionService.ts    # Service layer
+│   ├── /store                     # State management (e.g., Zustand/Recoil)
+│   ├── /pages                     # Next.js Pages
+│   │   ├── index.tsx               # Home page
+│   │   ├── predict.tsx             # Prediction page
+│   ├── /public                     # Static assets
+│   ├── /styles                     # Global styles
+│   ├── next.config.js              # Next.js config
+│   ├── tsconfig.json               # TypeScript config
+│
+├── /extensions                    # Browser extension code
+│   ├── /background                 # Background scripts
+│   ├── /content                    # Content scripts
+│   ├── manifest.json                # Extension manifest
+│
+├── docker-compose.yml              # Docker Compose config
+├── README.md                       # Project documentation

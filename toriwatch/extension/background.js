@@ -2,8 +2,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.action === "sendPin") {
         console.log("🌍 Forwarding PIN to Next.js API:", message.pin);
 
-        fetch("http://localhost:3000/api/sendPins", { // Change for production
-            method: "POST",
+        fetch("http://localhost:3000/api/sendPins", {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ pin: message.pin })
         })

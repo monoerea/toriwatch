@@ -1,0 +1,4 @@
+requests
+pytest
+pip-tools
+pip

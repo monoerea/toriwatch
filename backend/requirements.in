@@ -1,0 +1,9 @@
+fastapi==0.115.11
+motor[aws]
+uvicorn[standard]
+pydantic[email]
+pydantic-settings
+tweepy
+scikit-learn
+torch
+skorch
