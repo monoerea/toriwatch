@@ -1,34 +1,23 @@
-
-import os
-from pydantic import BaseModel, Field, validator, EmailStr
+from typing import Optional, List, Literal
+from pydantic import BaseModel, Field, EmailStr, field_validator
+from pydantic_settings import ConfigDict
 from datetime import datetime
-from typing import Literal
-import motor.motor_asyncio
-from pymongo import ReturnDocument
-from pydantic import ConfigDict, BaseModel, Field, EmailStr
-from pydantic.functional_validators import BeforeValidator
-
-from typing_extensions import Annotated
-
 from bson import ObjectId
-
-client = motor.motor_asyncio.AsyncIOMotorClient(os.environ["MONGODB_URL"])
-db = client.college
-student_collection = db.get_collection("students")
-PyObjectId = Annotated[str, BeforeValidator(str)]
 
 class AccountClassification(BaseModel):
     label: Literal["bot", "human", "suspicious"]
-    confidence_score: float = Field(..., ge=0.0, le=1.0, description="Confidence score from 0 to 1")
+    confidence_score: float = Field(..., ge=0.5, le=1.0, description="Confidence score from 0.5 to 1.0")
 
-    @validator("confidence_score")
+    @field_validator("confidence_score")
+    @classmethod
     def check_confidence(cls, value):
-        if value < 0.5 and value > 0:
-            raise ValueError("Confidence score is too low to classify the account reliably.")
+        if value < 0.5:
+            raise ValueError("Confidence score must be at least 0.5 for reliable classification.")
         return value
 
+
 class User(BaseModel):
-    _id: int = Field(default=False, description="Id of the user's X account")
+    _id: int = Field(..., description="ID of the user's X account")
     username: str = Field(..., min_length=4, max_length=50, regex="^[a-zA-Z0-9_]+$")
     email: EmailStr
     has_access: bool = Field(default=False, description="User has access to the bot")
@@ -40,21 +29,17 @@ class User(BaseModel):
     tweet_count: int = Field(..., ge=0)
     engagement_score: float = Field(default=0.0, ge=0.0, le=1.0, description="Engagement score from 0-1")
 
-    @validator("username")
-    def validate_username(cls, value):
-        if not value.isalnum() and "_" not in value:
-            raise ValueError("Username must contain only letters, numbers, or underscores.")
-        return value
-
-    @validator("engagement_score")
+    @field_validator("engagement_score")
+    @classmethod
     def validate_engagement_score(cls, value):
         if value > 0.9:
             raise ValueError("Engagement score is too high, possible bot activity.")
         return value
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
+                "_id": 6929073,
                 "username": "example_user",
                 "email": "user@example.com",
                 "has_access": True,
@@ -70,3 +55,54 @@ class User(BaseModel):
                 "engagement_score": 0.75
             }
         }
+    )
+
+class UpdateAccountClassification(BaseModel):
+    label: Optional[Literal["bot", "human", "suspicious"]] = None
+    confidence_score: Optional[float] = Field(None, ge=0.5, le=1.0, description="Updated confidence score")
+
+
+class UpdateUserModel(BaseModel):
+    """
+    A set of optional updates to be made to a user document in the database.
+    """
+
+    username: Optional[str] = None
+    email: Optional[EmailStr] = None
+    has_access: Optional[bool] = None
+    is_authenticated: Optional[bool] = None
+    account_classification: Optional[UpdateAccountClassification] = None
+    follower_count: Optional[int] = None
+    following_count: Optional[int] = None
+    tweet_count: Optional[int] = None
+    engagement_score: Optional[float] = None
+
+    model_config = ConfigDict(
+        arbitrary_types_allowed=True,
+        json_encoders={ObjectId: str},
+        json_schema_extra={
+            "example": {
+                "username": "updated_user",
+                "email": "updated_email@example.com",
+                "has_access": True,
+                "is_authenticated": True,
+                "account_classification": {
+                    "label": "human",
+                    "confidence_score": 0.85
+                },
+                "follower_count": 1300,
+                "following_count": 350,
+                "tweet_count": 5200,
+                "engagement_score": 0.68
+            }
+        }
+    )
+
+class UserCollection(BaseModel):
+    """
+    A container holding a list of `User` instances.
+
+    This avoids vulnerabilities related to returning top-level JSON arrays.
+    """
+
+    users: List[User]

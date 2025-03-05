@@ -3,15 +3,14 @@
 ├── /backend                      # FastAPI Backend
 │   ├── /app                      # Main FastAPI app
 │   │   ├── /api                  # API routes
-│   │   │   ├── v1/               # Versioned API
-│   │   │   │   ├── endpoints.py  # API endpoints
-│   │   │   │   ├── models.py     # Pydantic models
-│   │   │   │   ├── schemas.py    # Request/Response schemas
-│   │   │   │   ├── services.py   # Business logic layer
-│   │   │   │   ├── events.py     # Event-driven handlers
-│   │   │   │   ├── dependencies.py # Dependency injection
+│   │   │   ├── endpoints.py      # API endpoints
+│   │   │   ├── models.py         # Pydantic models
+│   │   │   ├── schemas.py        # Request/Response schemas
+│   │   │   ├── services.py       # Business logic layer
+│   │   │   ├── events.py         # Event-driven handlers
+│   │   │   ├── dependencies.py   # Dependency injection
 │   │   ├── /core                 # Core utilities and config
-│   │   │   ├── config.py         # App settings
+│   │   │   ├── config.py         # App settings (uses .env from outermost level)
 │   │   │   ├── security.py       # Authentication/authorization
 │   │   ├── /models               # ML Models
 │   │   │   ├── model_loader.py   # Load trained models
@@ -34,7 +33,7 @@
 │   ├── requirements.txt           # Dependencies
 │   ├── dev-requirements.txt       # Dev dependencies
 │   ├── Dockerfile                 # Docker config
-│   ├── .env                       # Environment variables
+│   ├── .env.example               # Example environment variables template
 │
 ├── /frontend                      # Next.js Frontend
 │   ├── /components                # UI Components
@@ -63,4 +62,5 @@
 │   ├── manifest.json                # Extension manifest
 │
 ├── docker-compose.yml              # Docker Compose config
+├── .env                            # Environment variables (outermost level)
 ├── README.md                       # Project documentation
