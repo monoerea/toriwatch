@@ -7,3 +7,4 @@ tweepy
 scikit-learn
 torch
 skorch
+httpx

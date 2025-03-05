@@ -9,8 +9,6 @@ ENV_PATH = os.path.join(BASE_DIR, "..", "..", "..", ".env")  # Move three levels
 
 load_dotenv(ENV_PATH)
 
-
-
 class Settings(BaseSettings):
     APP_NAME: str = "X-Bot API"
     VERSION: str = "1.0.0"
@@ -19,9 +17,7 @@ class Settings(BaseSettings):
 
     MONGODB_URL: str = os.getenv("MONGODB_URL")
 
-    DEBUG: bool = True  # Toggle debug mode
-    SECRET_KEY: str  # For security (JWT, hashing)
-    ALLOWED_HOSTS: list[str] = ["localhost", "127.0.0.1", "mongodb+srv://sheensenorin:<db_CJEl8tFLYP5fLPIF>@tori-db.vo3pe.mongodb.net/?retryWrites=true&w=majority&appName=tori-db"]
+    DEBUG: bool = True  # Toggle debug mode security (JWT, hashing)
     class Config:
         env_file = ".env"  # Load from a .env file
         env_file_encoding = "utf-8"

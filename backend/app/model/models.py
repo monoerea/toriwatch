@@ -1,6 +1,5 @@
 from typing import Optional, List, Literal
-from pydantic import BaseModel, Field, EmailStr, field_validator
-from pydantic_settings import ConfigDict
+from pydantic import BaseModel, Field, EmailStr, field_validator, ConfigDict
 from datetime import datetime
 from bson import ObjectId
 
@@ -17,8 +16,8 @@ class AccountClassification(BaseModel):
 
 
 class User(BaseModel):
-    _id: int = Field(..., description="ID of the user's X account")
-    username: str = Field(..., min_length=4, max_length=50, regex="^[a-zA-Z0-9_]+$")
+    id: str = Field(..., description="ID of the user's X account")
+    username: str = Field(..., min_length=4, max_length=50, pattern=r'^[\w\.]+$')
     email: EmailStr
     has_access: bool = Field(default=False, description="User has access to the bot")
     is_authenticated: bool = Field(default=False, description="User authenticated with Twitter")
@@ -39,7 +38,7 @@ class User(BaseModel):
     model_config = ConfigDict(
         json_schema_extra={
             "example": {
-                "_id": 6929073,
+                "id": 6929073,
                 "username": "example_user",
                 "email": "user@example.com",
                 "has_access": True,
