@@ -1,14 +1,10 @@
-from typing import List
 from typing_extensions import Annotated
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter
 from pymongo import ReturnDocument
 from pydantic import BeforeValidator
 from fastapi import Body, HTTPException, status
 from fastapi.responses import Response
 from app.model.models import AccountClassification, User, UserCollection, UpdateUserModel, UpdateAccountClassification
-import motor.motor_asyncio
-from app.core.config import get_settings
-from motor.motor_asyncio import AsyncIOMotorCollection
 from app.core.logger import logger
 from app.core.db import user_collection
 
@@ -20,31 +16,31 @@ ObjectId = Annotated[str, BeforeValidator(str)]
 async def list_users():
     if user_collection is None:
         raise HTTPException(status_code=500, detail="Database not initialized")
-    users_cursor = await user_collection.find().to_list(10)
-    logger.debug(f"Fetched users: {users_cursor}")
-    users = [
-        User(
-            id=str(user["_id"]),  # Convert ObjectId to string
-            username=user["username"],
-            email=user["email"],
-            has_access=user["has_access"],
-            is_authenticated=user["is_authenticated"],
-            account_classification=AccountClassification(**user["account_classification"]),  # Handle nested field
-            created_at=user["created_at"],
-            follower_count=user["follower_count"],
-            following_count=user["following_count"],
-            tweet_count=user["tweet_count"],
-            engagement_score=user["engagement_score"]
-        ) for user in users_cursor
-    ]
-    return UserCollection(users=users)
+    try:
+        users_cursor = await user_collection.find().to_list(10)
+        users = [User(id=str(user["_id"]), **user) for user in users_cursor]
+        return UserCollection(users=users)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching users: {str(e)}")
 
 @router.post("/", response_description="Add new user", response_model=User, status_code=status.HTTP_201_CREATED, response_model_by_alias=False)
 async def create_user(user: User = Body(...)):
-    new_user = await user_collection.insert_one(user.model_dump(by_alias=True, exclude=["id"]))
-    created_user = await user_collection.find_one({"_id": new_user.inserted_id})
-    return created_user
+    # Check for duplicate users if needed
+    if await user_collection.find_one({"email": user.email}):
+        raise HTTPException(status_code=400, detail="User with this email already exists")
 
+    user_data = user.model_dump(by_alias=True, exclude={"id"})
+
+    new_user = await user_collection.insert_one(user_data)
+
+    created_user = await user_collection.find_one({"_id": new_user.inserted_id})
+
+    if not created_user:
+        raise HTTPException(status_code=500, detail="User creation failed")
+
+    created_user_model = User(**created_user)
+
+    return created_user_model
 
 @router.get("/{id}", response_description="Get a single user", response_model=User, response_model_by_alias=False)
 async def show_user(id: str):
@@ -57,10 +53,10 @@ async def show_user(id: str):
 async def update_user(id: str, user: UpdateUserModel = Body(...), account_classification: UpdateAccountClassification = Body(...)):
     # Update user fields
     user_data = {k: v for k, v in user.model_dump(by_alias=True).items() if v is not None}
-    
+
     if account_classification.label or account_classification.confidence_score:  # Check if account classification is updated
-        user_data["account_classification"] = account_classification.dict(exclude_unset=True)
-    
+        user_data["account_classification"] = account_classification.model_dump(exclude_unset=True)
+
     if len(user_data) >= 1:
         update_result = await user_collection.find_one_and_update(
             {"_id": ObjectId(id)},

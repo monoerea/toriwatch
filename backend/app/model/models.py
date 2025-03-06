@@ -16,37 +16,40 @@ class AccountClassification(BaseModel):
 
 
 class User(BaseModel):
-    id: str = Field(..., description="ID of the user's X account")
-    username: str = Field(..., min_length=4, max_length=50, pattern=r'^[\w\.]+$')
-    email: EmailStr
-    has_access: bool = Field(default=False, description="User has access to the bot")
-    is_authenticated: bool = Field(default=False, description="User authenticated with Twitter")
-    account_classification: AccountClassification
+    id: str = Field(..., description="My generated id")
+    xid: int = Field(..., description="ID of the user's X account")
+    username: str = Field(..., min_length=4, max_length=50, pattern=r'^[\w\.-]+$', description="User's username")
     created_at: datetime = Field(..., description="Twitter account creation date")
-    follower_count: int = Field(..., ge=0)
-    following_count: int = Field(..., ge=0)
-    tweet_count: int = Field(..., ge=0)
-    engagement_score: float = Field(default=0.0, ge=0.0, le=1.0, description="Engagement score from 0-1")
+
+    account_classification: Optional[AccountClassification] = Field(None, description="Classification of the user's account")
+    email: Optional[EmailStr] = Field(None, description="User's email address")
+    follower_count: Optional[int] = Field(None, ge=0, description="Number of followers")
+    following_count: Optional[int] = Field(None, ge=0, description="Number of accounts the user is following")
+    tweet_count: Optional[int] = Field(None, ge=0, description="Number of tweets by the user")
+    
+    has_access: bool = Field(..., description="User has access to the bot")
+    is_authenticated: bool = Field(..., description="User authenticated with Twitter")
+
+    engagement_score: Optional[float] = Field(0.0, ge=0.0, le=1.0, description="Engagement score from 0-1")
 
     @field_validator("engagement_score")
     @classmethod
     def validate_engagement_score(cls, value):
-        if value > 0.9:
+        if value > 1:
             raise ValueError("Engagement score is too high, possible bot activity.")
         return value
 
+    # Example for JSON schema
     model_config = ConfigDict(
         json_schema_extra={
             "example": {
-                "id": 6929073,
+                "id": "6929073",
+                "xid": "3435342",
                 "username": "example_user",
                 "email": "user@example.com",
                 "has_access": True,
                 "is_authenticated": True,
-                "account_classification": {
-                    "label": "bot",
-                    "confidence_score": 0.92
-                },
+                "account_classification": None,  # Initially None
                 "created_at": "2023-06-12T15:23:00",
                 "follower_count": 1200,
                 "following_count": 300,
@@ -55,6 +58,7 @@ class User(BaseModel):
             }
         }
     )
+
 
 class UpdateAccountClassification(BaseModel):
     label: Optional[Literal["bot", "human", "suspicious"]] = None
@@ -65,7 +69,7 @@ class UpdateUserModel(BaseModel):
     """
     A set of optional updates to be made to a user document in the database.
     """
-
+    xid: Optional[str] = None
     username: Optional[str] = None
     email: Optional[EmailStr] = None
     has_access: Optional[bool] = None
@@ -97,11 +101,11 @@ class UpdateUserModel(BaseModel):
         }
     )
 
+
 class UserCollection(BaseModel):
     """
     A container holding a list of `User` instances.
 
     This avoids vulnerabilities related to returning top-level JSON arrays.
     """
-
     users: List[User]

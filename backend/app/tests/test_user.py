@@ -4,13 +4,14 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../.
 from app.core.logger import logger
 import pytest
 import httpx
+import requests
 
+BASE_URL = "http://127.0.0.1:8000"
 # Use httpx.AsyncClient for async requests
 @pytest.mark.asyncio
 async def test_get_all_users():
     """Test retrieving all users from MongoDB."""
-    async with httpx.AsyncClient(base_url="http://127.0.0.1:8000", timeout=30.0) as client:  # Set timeout to 30 seconds
-        # Send GET request to the /api/users/ endpoint
+    async with httpx.AsyncClient(base_url=BASE_URL, timeout=30.0) as client:
         response = await client.get("/api/users/")
 
         # Log the raw response and the status code
@@ -41,6 +42,7 @@ async def test_get_all_users():
         # Check the structure of each user in the collection
         for user in response_data["users"]:
             assert "id" in user
+            assert "xid" in user
             assert "username" in user
             assert "email" in user
             assert "has_access" in user
@@ -53,3 +55,41 @@ async def test_get_all_users():
             assert "engagement_score" in user
 
         logger.info(f"Successfully retrieved {len(response_data['users'])} users.")
+
+
+def sample_user():
+    """Fixture to provide a sample user object."""
+    return {
+        "_id": "6929073",
+        "xid": 3483233,
+        "username": "example",
+        "email": "example@mail.dev",
+        "has_access": True,
+        "is_authenticated": True,
+        "account_classification": {
+            "label": "bot",
+            "confidence_score": 0.69
+        },
+        "created_at": "2023-08-17T07:59:22.589Z",
+        "follower_count": 14357,
+        "following_count": 2019,
+        "tweet_count": 1070,
+        "engagement_score": 0.42
+    }
+
+@pytest.mark.asyncio
+async def test_create_user():
+    """Test creating a new user."""
+    user = sample_user()  # Assuming sample_user() returns a valid user dictionary
+    async with httpx.AsyncClient(base_url=BASE_URL, timeout=30.0) as client:
+        try:
+            response = await client.post("/api/users/", json=user)  # Ensure this is awaited
+            assert response.status_code == 201  # HTTP 201 Created
+            # Parse response JSON data
+            doc = response.json()
+            # Assertions
+            assert "_id" in doc
+            assert doc["email"] == user["email"]
+            return doc["_id"]  # Return the inserted user's ID (if needed)
+        except Exception as e:
+            print(e)
