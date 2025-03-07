@@ -1,25 +1,51 @@
-/your_project
+/toriwatch
 │
 ├── /backend                      # FastAPI Backend
 │   ├── /app                      # Main FastAPI app
 │   │   ├── /api                  # API routes
-│   │   │   ├── endpoints.py      # API endpoints
-│   │   │   ├── models.py         # Pydantic models
-│   │   │   ├── schemas.py        # Request/Response schemas
-│   │   │   ├── services.py       # Business logic layer
-│   │   │   ├── events.py         # Event-driven handlers
-│   │   │   ├── dependencies.py   # Dependency injection
+│   │   │   ├── /auth             # Authentication endpoints
+│   │   │   │   ├── endpoints.py
+│   │   │   │   ├── schemas.py
+│   │   │   ├── /tweets           # Tweets-related endpoints
+│   │   │   │   ├── endpoints.py
+│   │   │   │   ├── schemas.py
+│   │   │   ├── /predictions      # Prediction endpoints
+│   │   │   │   ├── endpoints.py
+│   │   │   │   ├── schemas.py
 │   │   ├── /core                 # Core utilities and config
 │   │   │   ├── config.py         # App settings (uses .env from outermost level)
 │   │   │   ├── security.py       # Authentication/authorization
-│   │   ├── /models               # ML Models
-│   │   │   ├── model_loader.py   # Load trained models
-│   │   │   ├── model_trainer.py  # Train ML models
-│   │   │   ├── model_evaluator.py# Evaluate models
+│   │   │   ├── events.py         # Event handlers (startup, shutdown)
+│   │   ├── /models               # Database models
+│   │   │   ├── user.py           # User model
+│   │   │   ├── tweet.py          # Tweet model
+│   │   ├── /services             # Business logic layer
+│   │   │   ├── auth.py           # Authentication services
+│   │   │   ├── twitter.py        # Twitter API services
+│   │   │   ├── tweet_analysis.py # Tweet analysis services
+│   │   │   ├── prediction.py     # Prediction services
+│   │   ├── /ml_pipeline          # End-to-end ML pipeline
+│   │   │   ├── /data_ingestion   # Data ingestion scripts
+│   │   │   │   ├── twitter_ingestion.py
+│   │   │   ├── /data_preprocessing # Data preprocessing scripts
+│   │   │   │   ├── preprocessor.py
+│   │   │   ├── /model_training   # Model training scripts
+│   │   │   │   ├── train.py
+│   │   │   ├── /model_evaluation # Model evaluation scripts
+│   │   │   │   ├── evaluate.py
+│   │   │   ├── /model_deployment # Model deployment scripts
+│   │   │   │   ├── deploy.py
+│   │   │   ├── /monitoring       # Model monitoring scripts
+│   │   │   │   ├── monitor.py
+│   │   │   ├── pipeline.py       # End-to-end pipeline orchestration
+│   │   ├── /events               # Event-driven handlers
+│   │   │   ├── tweet_events.py   # Tweet-related event handlers
+│   │   │   ├── user_events.py    # User-related event handlers
+│   │   ├── /dependencies         # Dependency injection
+│   │   │   ├── auth.py           # Auth dependencies
+│   │   │   ├── twitter.py        # Twitter client dependencies
 │   │   ├── /tests                # Unit & Integration tests
 │   │   ├── main.py               # FastAPI entry point
-│   │   ├── events.py             # Event listeners (startup, shutdown)
-│   │   ├── dependencies.py       # Shared dependencies
 │   │
 │   ├── /data                     # Data storage
 │   │   ├── /datasets             # Raw datasets
@@ -35,20 +61,21 @@
 │   ├── Dockerfile                 # Docker config
 │   ├── .env.example               # Example environment variables template
 │
-├── /frontend                      # Next.js Frontend
-│   ├── /components                # UI Components
+├── /frontend                      # Next.js Frontend (MVVM Architecture)
+│   ├── /components                # UI Components (View)
 │   │   ├── Button.tsx
 │   │   ├── Card.tsx
-│   ├── /views                     # MVVM Views
+│   ├── /views                     # Views (View)
 │   │   ├── Home.tsx
 │   │   ├── Predict.tsx
-│   ├── /models                    # Frontend data models
-│   │   ├── PredictionModel.ts
-│   ├── /services                  # API services (fetching data)
-│   │   ├── api.ts                  # API client
-│   │   ├── predictionService.ts    # Service layer
+│   ├── /viewmodels                # ViewModels (ViewModel)
+│   │   ├── HomeViewModel.ts
+│   │   ├── PredictViewModel.ts
+│   ├── /models                    # Models (Model)
+│   │   ├── User.ts
+│   │   ├── Tweet.ts
 │   ├── /store                     # State management (e.g., Zustand/Recoil)
-│   ├── /pages                     # Next.js Pages
+│   ├── /pages                     # Next.js Pages (View)
 │   │   ├── index.tsx               # Home page
 │   │   ├── predict.tsx             # Prediction page
 │   ├── /public                     # Static assets

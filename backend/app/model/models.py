@@ -1,7 +1,14 @@
 from typing import Optional, List, Literal
-from pydantic import BaseModel, Field, EmailStr, field_validator, ConfigDict
+from fastapi import Depends
+from typing_extensions import Annotated
+from pydantic import BaseModel, Field, EmailStr, SecretStr, field_validator, ConfigDict
 from datetime import datetime
 from bson import ObjectId
+from fastapi.security import OAuth2PasswordBearer
+from backend.main import app
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
 
 class AccountClassification(BaseModel):
     label: Literal["bot", "human", "suspicious"]
@@ -14,12 +21,17 @@ class AccountClassification(BaseModel):
             raise ValueError("Confidence score must be at least 0.5 for reliable classification.")
         return value
 
-
+def fake_decode_token(token):
+    return User(
+        username=token + "fakedecoded", email="john@example.com", full_name="John Doe"
+    )
 class User(BaseModel):
     id: str = Field(..., description="My generated id")
     xid: int = Field(..., description="ID of the user's X account")
     username: str = Field(..., min_length=4, max_length=50, pattern=r'^[\w\.-]+$', description="User's username")
     created_at: datetime = Field(..., description="Twitter account creation date")
+    twitter_access_token: SecretStr
+    twitter_access_token_secret: SecretStr
 
     account_classification: Optional[AccountClassification] = Field(None, description="Classification of the user's account")
     email: Optional[EmailStr] = Field(None, description="User's email address")
@@ -39,7 +51,6 @@ class User(BaseModel):
             raise ValueError("Engagement score is too high, possible bot activity.")
         return value
 
-    # Example for JSON schema
     model_config = ConfigDict(
         json_schema_extra={
             "example": {
@@ -100,7 +111,6 @@ class UpdateUserModel(BaseModel):
             }
         }
     )
-
 
 class UserCollection(BaseModel):
     """
