@@ -79,19 +79,22 @@ class DataFlattener(DataCleaner):
 
 # --- General Column Cleanup (Duplicates, Nulls, Specified Columns) ---
 
-class ColumnCleaner(DataCleaner):
+class GenCleaner(DataCleaner):
     """Handles duplicate removal, null value handling, and dropping specified columns."""
 
-    def __init__(self, columns_to_remove=None, null_threshold=0.5):
+    def __init__(self, columns_to_remove=None, null_threshold=0.5, column_for_deduplication=None):
         """
         :param columns_to_remove: List of columns to drop (default: None)
         :param null_threshold: Columns with more than this proportion of missing values will be dropped.
         """
         self.columns_to_remove = columns_to_remove or []
         self.null_threshold = null_threshold
+        self.column_for_deduplication = column_for_deduplication
 
     def process(self, df: pd.DataFrame) -> pd.DataFrame:
-        # Remove duplicate columns
+        # Remove duplicates
+        if self.column_for_deduplication in df.columns:
+            df = df.drop_duplicates(subset=self.column_for_deduplication, keep="first")
         df = df.loc[:, ~df.T.duplicated()]
 
         # Remove columns based on null threshold
