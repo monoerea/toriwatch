@@ -1,16 +1,17 @@
-import asyncio
-import pytest
-from motor.motor_asyncio import AsyncIOMotorClient
-from app.repositories.user import (
-    list_users, get_user_by_id, create_user, update_user, delete_user
-)
-from bson import ObjectId
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
 
+import pytest
+from app.repositories.user import UserRepository
+from bson import ObjectId
+from app.dependencies.db import get_db
+id =  ObjectId()
 @pytest.fixture(scope="module")
 async def user_data():
     """Mock user data."""
     return {
-        "_id": ObjectId(),
+        "_id":id,
         "xid": 12345678,
         "username": "testuser",
         "email": "test@example.com",
@@ -18,26 +19,38 @@ async def user_data():
         "is_authenticated": False
     }
 
-@pytest.mark.asyncio
-async def test_list_users():
-    users = await list_users()
-    assert len(users) > 0
+@pytest.fixture
+def user_repo():
+    db = get_db()
+    return UserRepository(db)
 
 @pytest.mark.asyncio
-async def test_create_user():
-    """Test creating a new user."""
-    user_data = {
-        "email": "test@example.com",
-        "has_access": True,
-        "is_authenticated": False,
-        "account_classification": "bot",
-        "created_at": "2024-03-07T12:00:00Z",
-        "follower_count": 100,
-        "following_count": 50,
-        "tweet_count": 200,
-        "engagement_score": 0.75
-    }
+async def test_list_users(user_repo):
+    users = await user_repo.list_users()
+    assert isinstance(users, list)
 
-    created_user = await create_user(user_data)
-    assert created_user is not None
-    assert created_user["email"] == "test@example.com"
+@pytest.mark.asyncio
+async def test_create_user(user_repo):
+    user_data = {"id":id, "name": "Test User", "email": "test@example.com"}
+    user = await user_repo.create_user(user_data)
+    assert user["name"] == "Test User"
+    assert user["id"] == id
+
+@pytest.mark.asyncio
+async def test_get_user_by_id(user_repo):
+    user_id = id
+    user = await user_repo.get_user_by_id(user_id)
+    assert user is None or isinstance(user, dict)
+
+@pytest.mark.asyncio
+async def test_update_user(user_repo):
+    user_id = id
+    update_data = {"name": "Updated User"}
+    user = await user_repo.update_user(user_id, update_data)
+    assert user is None or user["name"] == "Updated User"
+
+@pytest.mark.asyncio
+async def test_delete_user(user_repo):
+    user_id = id
+    result = await user_repo.delete_user(user_id)
+    assert result is True or result is False

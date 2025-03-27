@@ -1,0 +1,404 @@
+x-bot-spt-ext/
+├── backend/
+│   ├── .gitignore
+│   ├── app/
+│   │   ├── api/
+│   │   │   ├── endpoints/
+│   │   │   │   ├── auth.py
+│   │   │   │   ├── tweets.py
+│   │   │   │   ├── users.py
+│   │   │   ├── router.py
+│   │   │   ├── __init__.py
+│   │   ├── core/
+│   │   │   ├── config.py
+│   │   │   ├── db.py
+│   │   │   ├── logger.py
+│   │   │   ├── security.py
+│   │   │   ├── __init__.py
+│   │   ├── dependencies/
+│   │   │   ├── db.py
+│   │   │   ├── users.py
+│   │   │   ├── x_auth.py
+│   │   │   ├── __init__.py
+│   │   ├── ml_pipeline/
+│   │   │   ├── data_ingestion.py
+│   │   │   ├── __init__.py
+│   │   ├── model/
+│   │   │   ├── models.py
+│   │   │   ├── tweets.py
+│   │   │   ├── users.py
+│   │   │   ├── __init__.py
+│   │   ├── repositories/
+│   │   │   ├── twitter_auth_repo.py
+│   │   │   ├── user.py
+│   │   │   ├── __init__.py
+│   │   ├── services/
+│   │   │   ├── aws_sagemaker_pipeline/
+│   │   │   │   ├── data_ingestion.py
+│   │   │   ├── users.py
+│   │   │   ├── __init__.py
+│   │   ├── tests/
+│   │   │   ├── conftest.py
+│   │   │   ├── endpoints.py
+│   │   │   ├── integration_test.py
+│   │   │   ├── test_user_repo.py
+│   │   │   ├── test_user_service.py
+│   │   │   ├── __init__.py
+│   │   ├── __init__.py
+│   ├── data/
+│   ├── dev-requirements.in
+│   ├── dev-requirements.txt
+│   ├── main.py
+│   ├── pytest.ini
+│   ├── requirements.in
+│   ├── requirements.txt
+│   ├── scripts/
+│   │   ├── checker.py
+│   │   ├── generateUsers.js
+│   │   ├── mongo_conn.py
+│   │   ├── __init__.py
+│   ├── __init__.py
+├── folder-struct.txt
+├── frontend/
+│   ├── .gitignore
+│   ├── eslint.config.mjs
+│   ├── extension/
+│   │   ├── background.js
+│   │   ├── content.js
+│   │   ├── IMG/
+│   │   │   ├── icon128.png
+│   │   │   ├── icon16.png
+│   │   │   ├── icon48.png
+│   │   ├── manifest.json
+│   │   ├── popup.css
+│   │   ├── popup.html
+│   │   ├── popup.js
+│   ├── jsconfig.json
+│   ├── next.config.mjs
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── postcss.config.mjs
+│   ├── public/
+│   │   ├── file.svg
+│   │   ├── globe.svg
+│   │   ├── next.svg
+│   │   ├── twitter.svg
+│   │   ├── vercel.svg
+│   │   ├── window.svg
+│   ├── README.md
+│   ├── src/
+│   │   ├── api/
+│   │   │   ├── auth.js
+│   │   ├── app/
+│   │   │   ├── auth/
+│   │   │   │   ├── page.js
+│   │   │   ├── favicon.ico
+│   │   │   ├── globals.css
+│   │   │   ├── layout.js
+│   │   │   ├── page.js
+│   │   │   ├── popup/
+│   │   │   │   ├── page.js
+│   │   ├── background/
+│   │   │   ├── bg.js
+│   │   ├── components/
+│   │   │   ├── Footer.js
+│   │   │   ├── LayoutWrapper.js
+│   │   │   ├── LoginForm.js
+│   │   │   ├── NavBar.js
+│   │   │   ├── PopupForm.js
+│   │   │   ├── ToggleButton.js
+│   │   ├── content_scripts/
+│   │   │   ├── domUtils.js
+│   │   │   ├── main.js
+│   │   │   ├── observer.js
+│   │   │   ├── queue.js
+│   │   ├── controllers/
+│   │   │   ├── authControllers.js
+│   │   ├── models/
+│   │   │   ├── userModel.js
+│   │   ├── store/
+│   │   ├── viewmodel/
+│   │   │   ├── ManViewModel.js
+│   │   ├── views/
+│   │   │   ├── HeroSection.js
+│   │   │   ├── MainView.jsx
+│   │   ├── _util/
+│   │   │   ├── background.js
+│   │   │   ├── constants.js
+│   │   │   ├── content_scripts.js
+│   ├── tailwind.config.mjs
+│   ├── webpack.config.js
+
+
+
+folder-struct.txt:
+
+x-bot-spt-ext/
+├── backend/
+│   ├── .gitignore
+│   ├── app/
+│   │   ├── api/
+│   │   │   ├── endpoints/
+│   │   │   │   ├── auth.py
+│   │   │   │   ├── tweets.py
+│   │   │   │   ├── users.py
+│   │   │   ├── router.py
+│   │   │   ├── __init__.py
+│   │   ├── core/
+│   │   │   ├── config.py
+│   │   │   ├── db.py
+│   │   │   ├── logger.py
+│   │   │   ├── security.py
+│   │   │   ├── __init__.py
+│   │   ├── dependencies/
+│   │   │   ├── db.py
+│   │   │   ├── users.py
+│   │   │   ├── x_auth.py
+│   │   │   ├── __init__.py
+│   │   ├── ml_pipeline/
+│   │   │   ├── data_ingestion.py
+│   │   │   ├── __init__.py
+│   │   ├── model/
+│   │   │   ├── models.py
+│   │   │   ├── tweets.py
+│   │   │   ├── users.py
+│   │   │   ├── __init__.py
+│   │   ├── repositories/
+│   │   │   ├── twitter_auth_repo.py
+│   │   │   ├── user.py
+│   │   │   ├── __init__.py
+│   │   ├── services/
+│   │   │   ├── aws_sagemaker_pipeline/
+│   │   │   │   ├── data_ingestion.py
+│   │   │   ├── users.py
+│   │   │   ├── __init__.py
+│   │   ├── tests/
+│   │   │   ├── conftest.py
+│   │   │   ├── endpoints.py
+│   │   │   ├── integration_test.py
+│   │   │   ├── test_user_repo.py
+│   │   │   ├── test_user_service.py
+│   │   │   ├── __init__.py
+│   │   ├── __init__.py
+│   ├── data/
+│   ├── dev-requirements.in
+│   ├── dev-requirements.txt
+│   ├── main.py
+│   ├── pytest.ini
+│   ├── requirements.in
+│   ├── requirements.txt
+│   ├── scripts/
+│   │   ├── checker.py
+│   │   ├── generateUsers.js
+│   │   ├── mongo_conn.py
+│   │   ├── __init__.py
+│   ├── __init__.py
+├── folder-struct.txt
+├── frontend/
+│   ├── .gitignore
+│   ├── eslint.config.mjs
+│   ├── extension/
+│   │   ├── background.js
+│   │   ├── content.js
+│   │   ├── IMG/
+│   │   │   ├── icon128.png
+│   │   │   ├── icon16.png
+│   │   │   ├── icon48.png
+│   │   ├── manifest.json
+│   │   ├── popup.css
+│   │   ├── popup.html
+│   │   ├── popup.js
+│   ├── jsconfig.json
+│   ├── next.config.mjs
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── postcss.config.mjs
+│   ├── public/
+│   │   ├── file.svg
+│   │   ├── globe.svg
+│   │   ├── next.svg
+│   │   ├── twitter.svg
+│   │   ├── vercel.svg
+│   │   ├── window.svg
+│   ├── README.md
+│   ├── src/
+│   │   ├── api/
+│   │   │   ├── auth.js
+│   │   ├── app/
+│   │   │   ├── auth/
+│   │   │   │   ├── page.js
+│   │   │   ├── favicon.ico
+│   │   │   ├── globals.css
+│   │   │   ├── layout.js
+│   │   │   ├── page.js
+│   │   │   ├── popup/
+│   │   │   │   ├── page.js
+│   │   ├── background/
+│   │   │   ├── bg.js
+│   │   ├── components/
+│   │   │   ├── Footer.js
+│   │   │   ├── LayoutWrapper.js
+│   │   │   ├── LoginForm.js
+│   │   │   ├── NavBar.js
+│   │   │   ├── PopupForm.js
+│   │   │   ├── ToggleButton.js
+│   │   ├── content_scripts/
+│   │   │   ├── domUtils.js
+│   │   │   ├── main.js
+│   │   │   ├── observer.js
+│   │   │   ├── queue.js
+│   │   ├── controllers/
+│   │   │   ├── authControllers.js
+│   │   ├── models/
+│   │   │   ├── userModel.js
+│   │   ├── store/
+│   │   ├── viewmodel/
+│   │   │   ├── ManViewModel.js
+│   │   ├── views/
+│   │   │   ├── HeroSection.js
+│   │   │   ├── MainView.jsx
+│   │   ├── _util/
+│   │   │   ├── background.js
+│   │   │   ├── constants.js
+│   │   │   ├── content_scripts.js
+│   ├── tailwind.config.mjs
+│   ├── webpack.config.js
+├── keys.py
+
+
+
+folder-struct.txt:
+
+x-bot-spt-ext/
+├── .env
+├── backend/
+│   ├── .gitignore
+│   ├── app/
+│   │   ├── api/
+│   │   │   ├── endpoints/
+│   │   │   │   ├── auth.py
+│   │   │   │   ├── tweets.py
+│   │   │   │   ├── users.py
+│   │   │   ├── router.py
+│   │   │   ├── __init__.py
+│   │   ├── core/
+│   │   │   ├── config.py
+│   │   │   ├── db.py
+│   │   │   ├── logger.py
+│   │   │   ├── security.py
+│   │   │   ├── __init__.py
+│   │   ├── dependencies/
+│   │   │   ├── db.py
+│   │   │   ├── users.py
+│   │   │   ├── x_auth.py
+│   │   │   ├── __init__.py
+│   │   ├── ml_pipeline/
+│   │   │   ├── data_ingestion.py
+│   │   │   ├── __init__.py
+│   │   ├── model/
+│   │   │   ├── models.py
+│   │   │   ├── tweets.py
+│   │   │   ├── users.py
+│   │   │   ├── __init__.py
+│   │   ├── repositories/
+│   │   │   ├── twitter_auth_repo.py
+│   │   │   ├── user.py
+│   │   │   ├── __init__.py
+│   │   ├── services/
+│   │   │   ├── aws_sagemaker_pipeline/
+│   │   │   │   ├── data_ingestion.py
+│   │   │   ├── users.py
+│   │   │   ├── __init__.py
+│   │   ├── tests/
+│   │   │   ├── conftest.py
+│   │   │   ├── endpoints.py
+│   │   │   ├── integration_test.py
+│   │   │   ├── test_user_repo.py
+│   │   │   ├── test_user_service.py
+│   │   │   ├── __init__.py
+│   │   ├── __init__.py
+│   ├── data/
+│   ├── dev-requirements.in
+│   ├── dev-requirements.txt
+│   ├── main.py
+│   ├── pytest.ini
+│   ├── requirements.in
+│   ├── requirements.txt
+│   ├── scripts/
+│   │   ├── checker.py
+│   │   ├── generateUsers.js
+│   │   ├── mongo_conn.py
+│   │   ├── __init__.py
+│   ├── __init__.py
+├── folder-struct.txt
+├── folder-structure.txt
+├── frontend/
+│   ├── .gitignore
+│   ├── eslint.config.mjs
+│   ├── extension/
+│   │   ├── background.js
+│   │   ├── content.js
+│   │   ├── IMG/
+│   │   │   ├── icon128.png
+│   │   │   ├── icon16.png
+│   │   │   ├── icon48.png
+│   │   ├── manifest.json
+│   │   ├── popup.css
+│   │   ├── popup.html
+│   │   ├── popup.js
+│   ├── jsconfig.json
+│   ├── next.config.mjs
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── postcss.config.mjs
+│   ├── public/
+│   │   ├── file.svg
+│   │   ├── globe.svg
+│   │   ├── next.svg
+│   │   ├── twitter.svg
+│   │   ├── vercel.svg
+│   │   ├── window.svg
+│   ├── README.md
+│   ├── src/
+│   │   ├── api/
+│   │   │   ├── auth.js
+│   │   ├── app/
+│   │   │   ├── auth/
+│   │   │   │   ├── page.js
+│   │   │   ├── favicon.ico
+│   │   │   ├── globals.css
+│   │   │   ├── layout.js
+│   │   │   ├── page.js
+│   │   │   ├── popup/
+│   │   │   │   ├── page.js
+│   │   ├── background/
+│   │   │   ├── bg.js
+│   │   ├── components/
+│   │   │   ├── Footer.js
+│   │   │   ├── LayoutWrapper.js
+│   │   │   ├── LoginForm.js
+│   │   │   ├── NavBar.js
+│   │   │   ├── PopupForm.js
+│   │   │   ├── ToggleButton.js
+│   │   ├── content_scripts/
+│   │   │   ├── domUtils.js
+│   │   │   ├── main.js
+│   │   │   ├── observer.js
+│   │   │   ├── queue.js
+│   │   ├── controllers/
+│   │   │   ├── authControllers.js
+│   │   ├── models/
+│   │   │   ├── userModel.js
+│   │   ├── store/
+│   │   ├── viewmodel/
+│   │   │   ├── ManViewModel.js
+│   │   ├── views/
+│   │   │   ├── HeroSection.js
+│   │   │   ├── MainView.jsx
+│   │   ├── _util/
+│   │   │   ├── background.js
+│   │   │   ├── constants.js
+│   │   │   ├── content_scripts.js
+│   ├── tailwind.config.mjs
+│   ├── webpack.config.js
+├── keys.py

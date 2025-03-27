@@ -1,5 +1,12 @@
-from fastapi import Depends
-from app.core.db import user_collection
+from typing import AsyncGenerator
+from app.core.db import Database
+from motor.motor_asyncio import AsyncIOMotorDatabase
 
-def get_user_collection():
-    return user_collection
+async def get_db() -> AsyncGenerator[AsyncIOMotorDatabase, None]:
+    """Dependency to provide a MongoDB database instance."""
+    db_instance = Database()
+    await db_instance.connect()
+    try:
+        yield db_instance.get_db()
+    finally:
+        await db_instance.close()
