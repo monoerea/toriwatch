@@ -1,7 +1,6 @@
 import pandas as pd
 
-
-def load_data(file_path: str = "backend/mlops/data/processed/cleaned_accInfo.csv" ) -> pd.DataFrame:
+def load_data(file_path: str, index_col: str ) -> pd.DataFrame:
     """Load data from a file based on the file extension.
     
     Supported formats: CSV, JSON, ZIP (CSV), XLSX, XLS, SQLite.
@@ -10,11 +9,10 @@ def load_data(file_path: str = "backend/mlops/data/processed/cleaned_accInfo.csv
     :return: DataFrame containing the data.
     """
 
-    return pd.read_csv(file_path, index_col="user_id")
+    return pd.read_csv(file_path, index_col=index_col)
 
 def data_inspection(df: pd.DataFrame) -> None:
     """Inspect the DataFrame for basic information.
-    
     :param df: DataFrame to inspect.
     """
     print("Data Overview:")
@@ -27,9 +25,13 @@ def data_inspection(df: pd.DataFrame) -> None:
 def main():
     """Main funtion for testing the code.
     """
-    df = load_data()
-    data_inspection(df)
-    pass
+    filepaths = {
+        "backend/mlops/data/processed/accounts.csv": "user_id",
+        "backend/mlops/data/processed/tweets.csv":"id"
+    }
+    for filepath, col in filepaths.items():
+        df = load_data(filepath, col)
+        data_inspection(df)
 
 if __name__ == "__main__":
     main()
