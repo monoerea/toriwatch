@@ -128,7 +128,7 @@ def main():
         JSONDataIngestor(),
         ZipDataIngestor(),
         ExcelDataIngestor(),
-        SQLDataIngestor(db_url="sqlite:///my_database.db", table_name="users"),
+        # DataIngestor(db_url="sqlite:///my_database.db", table_name="users"),
     ]
 
     test_files = [

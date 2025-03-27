@@ -21,6 +21,7 @@ def main():
     df = filered_df()
     print(df.head())
     df = process(df)
-    df.to_csv("backend/mlops/data/processed/cleaned_accInfo.csv", index=False)
+    df.to_csv("backend/mlops/data/processed/test_3.csv", index=False)
+    #df.to_csv("backend/mlops/data/processed/cleaned_accInfo.csv", index=False)
 if __name__ == "__main__":
     main()
